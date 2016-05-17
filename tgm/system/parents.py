@@ -11,3 +11,7 @@ class Component(BaseObject):
 
 class World(BaseObject):
     pass
+
+
+class Tag(BaseObject):
+    pass

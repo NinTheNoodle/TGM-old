@@ -44,8 +44,7 @@ class BaseObject(object, metaclass=MetaObject):
         return self.__tgm__.children
 
     def descendants(self, query):
-        """Get all the direct descendants of this object that fulfil the query.
-        """
+        """Get all the descendants of this object that fulfil the query."""
         return select_descendants(self, query)
 
     @property
