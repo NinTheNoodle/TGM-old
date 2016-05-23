@@ -1,3 +1,6 @@
+"""Utility functions and classes."""
+
+
 def call_auto_callable(auto_call, inst, cls, _used_names=None):
     """Call the mapped function for each auto_call instance on the object.
 

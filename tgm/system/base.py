@@ -1,5 +1,6 @@
+"""The core objects of the system."""
 from weakref import ref
-from tgm.system import select_descendants, select_ancestor
+from tgm.system import select_descendants
 from tgm.system.util import AttrDict, call_auto_callable
 
 auto_call = {}

@@ -1,1 +1,2 @@
-from . import system, editor
+"""A cross platform game engine for teams or solo developers."""
+from . import system

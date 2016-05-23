@@ -1,3 +1,4 @@
+"""The object tree, querying and any other core systems of TGM."""
 from .query import Query
 from .selection import (
     select_ancestor, select_descendants, select_children, test_query

@@ -1,26 +1,20 @@
-"""
-
-"""
-
-from operator import and_, or_
+"""Search the object tree for objects fulfilling arbitrary criteria."""
 
 
 class Query(object):
-    """ """
-    optimizations = {
-        and_: set.intersection,
-        or_: set.union,
+    """An object representing a query to be performed.
 
-    }
+    This object is not the result of a query. This is the object created
+    to represent the structure of a query."""
 
     def __init__(self, operation, *arguments):
         self.operation = operation
         self.args = arguments
 
-    def get_candidates(self, test):
-        if self.operation == "and":
-            pass
-
+    def get_optimizable(self, world):
+        """Get the operations that can be sped up using set operations."""
+        pass
 
     def get_unoptimizable(self):
+        """Get the operations that should tested on the objects one by one."""
         pass
