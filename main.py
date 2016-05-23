@@ -1,15 +1,15 @@
-from tgm.system import Entity, World, Index, CompoundIndex, sys_event
+from tgm.system import Entity, World, compound_index, DummyIndex, Index, sys_event
 
 
 class Player(Entity):
-    x = Index(0)
-    y = Index(0)
+    x = DummyIndex(5)
+    y = DummyIndex(7)
 
-    pos = CompoundIndex(x, y)
+    compound_index(x, y)
 
     def __init__(self, parent, hat):
-        print(hat, parent, self.ancestor(Entity), self.children(Entity))
-        self.ancestor(World)
+        print(hat, parent, self.parent(Entity), self.children(Entity))
+        self.parent(World)
 
     @sys_event
     def sys_update(self):
@@ -18,6 +18,7 @@ class Player(Entity):
 root = Player(None, "root")
 c = Player(root, "c")
 root.sys_update()
-c.pos = (1, 2)
 c.x = 6
-print(c.x, c.y, c.pos)
+c.y = 0
+c.x = 2
+print(c.x, c.y)

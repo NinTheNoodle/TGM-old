@@ -19,6 +19,7 @@ class Query(object):
 
     def get_candidates(self, test):
         if self.operation == "and":
+            pass
 
 
     def get_unoptimizable(self):
