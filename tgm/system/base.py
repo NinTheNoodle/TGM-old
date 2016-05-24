@@ -28,12 +28,16 @@ class BaseObject(object, metaclass=MetaObject):
         call_auto_callable(auto_call, obj, cls)
         return obj
 
+    def destroy(self):
+        """Delete the object and all its children."""
+        pass
+
     def children(self, query):
         """Get all the immediate children of this object that fulfil the query.
         """
-        if query == BaseObject:
+        if query is BaseObject:
             return self.__tgm__.children.copy()
-        return self.__tgm__.children
+        return None
 
     def select(self, query):
         """Get all the descendants of this object that fulfil the query."""
@@ -43,7 +47,9 @@ class BaseObject(object, metaclass=MetaObject):
         """Return the closest of the object's parents that satisfies the query.
 
         If no query is given then the object's direct parent will be returned."""
-        return self.__tgm__.parent()
+        if query is None or query is BaseObject:
+            return self.__tgm__.parent()
+        return None
 
     def set_parent(self, parent):
         """Set the object's parent and update appropriate structures.
