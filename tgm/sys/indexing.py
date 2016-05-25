@@ -1,5 +1,5 @@
 """Index attributes to speed up queries."""
-from tgm.system import auto_call, Tag
+from tgm.sys import auto_call, Tag
 from collections import defaultdict
 
 NoValue = object()

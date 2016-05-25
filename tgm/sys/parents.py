@@ -1,8 +1,8 @@
 """Builtin classifications for objects."""
-from tgm.system import BaseObject
+from tgm.sys import Node
 
 
-class Entity(BaseObject):
+class Entity(Node):
     """The base class for corporeal objects.
 
     Conceptually an object is an entity if it exists in the world in
@@ -13,7 +13,7 @@ class Entity(BaseObject):
     pass
 
 
-class Component(BaseObject):
+class Component(Node):
     """The base class for objects that enhance other objects.
 
     Conceptually an object is a component if it exists purely as an
@@ -26,7 +26,7 @@ class Component(BaseObject):
     pass
 
 
-class World(BaseObject):
+class World(Node):
     """The base class for objects that logically encapsulate a universe.
 
     This object is intended to represent a level or some isolated universe.
@@ -38,7 +38,7 @@ class World(BaseObject):
     pass
 
 
-class Tag(BaseObject):
+class Tag(Node):
     """The base class for objects that exist as information about their parent.
 
     Tag objects should be treated as pieces of information about an object.

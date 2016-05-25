@@ -1,12 +1,12 @@
 """The core objects of the system."""
 from weakref import ref
-from tgm.system import select_descendants
-from tgm.system.util import AttrDict, call_auto_callable
+from tgm.sys import select_descendants
+from tgm.sys.util import AttrDict, call_auto_callable
 
 auto_call = {}
 
 
-class MetaObject(type):
+class NodeMetaClass(type):
     """Required to make indexing classes possible for queries."""
 
     def __getitem__(self, item):
@@ -14,13 +14,13 @@ class MetaObject(type):
         pass
 
 
-class BaseObject(object, metaclass=MetaObject):
+class Node(object, metaclass=NodeMetaClass):
     """The base object for all game objects and components."""
 
     def __new__(cls, parent, *args, **kwargs):
         """Setup the TGM related structures of the object."""
         obj = super().__new__(cls)
-        obj.__tgm__ = AttrDict(
+        obj._tgm = AttrDict(
             children=set(),
             parent=lambda: None
         )
@@ -35,8 +35,8 @@ class BaseObject(object, metaclass=MetaObject):
     def children(self, query):
         """Get all the immediate children of this object that fulfil the query.
         """
-        if query is BaseObject:
-            return self.__tgm__.children.copy()
+        if query is Node:
+            return self._tgm.children.copy()
         return None
 
     def select(self, query):
@@ -47,8 +47,8 @@ class BaseObject(object, metaclass=MetaObject):
         """Return the closest of the object's parents that satisfies the query.
 
         If no query is given then the object's direct parent will be returned."""
-        if query is None or query is BaseObject:
-            return self.__tgm__.parent()
+        if query is None or query is Node:
+            return self._tgm.parent()
         return None
 
     def set_parent(self, parent):
@@ -57,10 +57,10 @@ class BaseObject(object, metaclass=MetaObject):
         The object's parent is stored as a weak reference since it doesn't
         make sense for a child object to keep its parent alive."""
         if self.parent() is not None:
-            self.parent().__tgm__.children.remove(self)
+            self.parent()._tgm.children.remove(self)
 
         if parent is not None:
-            self.__tgm__.parent = ref(parent)
-            parent.__tgm__.children.add(self)
+            self._tgm.parent = ref(parent)
+            parent._tgm.children.add(self)
         else:
-            self.__tgm__.parent = lambda: None
+            self._tgm.parent = lambda: None

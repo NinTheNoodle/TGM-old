@@ -1,5 +1,5 @@
 """Events relating to the sys module."""
-from tgm.system import EventNamespace
+from tgm.sys import EventNamespace
 
 
 sys_event = EventNamespace(

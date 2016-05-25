@@ -1,6 +1,6 @@
 """Test stuff for now."""
-from tgm.system import (
-    Entity, World, compound_index, DummyIndex, sys_event, BaseObject
+from tgm.sys import (
+    Entity, World, compound_index, DummyIndex, sys_event, Node
 )
 
 
@@ -11,12 +11,12 @@ class Player(Entity):
     compound_index(x, y)
 
     def __init__(self, parent, hat):
-        print("INIT", hat, parent, self.parent(), self.children(BaseObject))
+        print("INIT", hat, parent, self.parent(), self.children(Node))
         self.parent(World)
 
     @sys_event
     def sys_update(self):
-        print("UPDATE", self.children(BaseObject))
+        print("UPDATE", self.children(Node))
 
 root = Player(None, "root")
 c = Player(root, "c")
