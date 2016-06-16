@@ -17,20 +17,16 @@ class NodeMetaClass(type):
 class Node(object, metaclass=NodeMetaClass):
     """The base object for all game objects and components."""
 
-    def __new__(cls, parent, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):
         """Setup the TGM related structures of the object."""
         obj = super().__new__(cls)
         obj._tgm = AttrDict(
             children=set(),
-            parent=lambda: None
+            parent=lambda: None,
+            indexes={}
         )
-        obj.set_parent(parent)
         call_auto_callable(auto_call, obj, cls)
         return obj
-
-    def destroy(self):
-        """Delete the object and all its children."""
-        pass
 
     def children(self, query):
         """Get all the immediate children of this object that fulfil the query.
@@ -39,7 +35,7 @@ class Node(object, metaclass=NodeMetaClass):
             return self._tgm.children.copy()
         return None
 
-    def select(self, query):
+    def find(self, query):
         """Get all the descendants of this object that fulfil the query."""
         return select_descendants(self, query)
 
@@ -51,16 +47,41 @@ class Node(object, metaclass=NodeMetaClass):
             return self._tgm.parent()
         return None
 
-    def set_parent(self, parent):
-        """Set the object's parent and update appropriate structures.
+    def attach(self, node):
+        """Add the given node as a child and update relevant indexes.
 
-        The object's parent is stored as a weak reference since it doesn't
-        make sense for a child object to keep its parent alive."""
-        if self.parent() is not None:
-            self.parent()._tgm.children.remove(self)
+        This will detach the node from any parent it's currently attached to."""
+        if node.parent() is not None:
+            node.parent().detach(node)
 
-        if parent is not None:
-            self._tgm.parent = ref(parent)
-            parent._tgm.children.add(self)
-        else:
-            self._tgm.parent = lambda: None
+        node._tgm.parent = ref(self)
+        self._tgm.children.add(node)
+        for key, node_set in node._tgm.indexes.items():
+            if node_set:
+                self._tgm.indexes[key].add(node)
+
+        return node
+
+    def detach(self, node):
+        """Remove the given node as a child and update relevant indexes."""
+        node._tgm.parent = lambda: None
+        for node_set in self._tgm.indexes:
+            try:
+                node_set.remove(node)
+            except KeyError:
+                pass
+        self._tgm.children.remove(node)
+
+    def add_index(self, value):
+        self._tgm.indexes[value].add(self)
+        try:
+            self.parent()._add_child_index(value, self)
+        except AttributeError:
+            pass
+
+    def _add_child_index(self, value, child):
+        self._tgm.indexes[value].add(child)
+        try:
+            self.parent()._add_child_index(value, self)
+        except AttributeError:
+            pass

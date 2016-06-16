@@ -24,4 +24,3 @@ def select_children(start, query):
 def test_query(obj, query):
     """Test to see if obj fulfills the query."""
     pass
-

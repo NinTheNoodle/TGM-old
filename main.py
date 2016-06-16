@@ -10,16 +10,16 @@ class Player(Entity):
 
     compound_index(x, y)
 
-    def __init__(self, parent, hat):
-        print("INIT", hat, parent, self.parent(), self.children(Node))
+    def __init__(self, hat):
+        print("INIT", hat, self.parent(), self.children(Node))
         self.parent(World)
 
     @sys_event
     def sys_update(self):
         print("UPDATE", self.children(Node))
 
-root = Player(None, "root")
-c = Player(root, "c")
+root = Player("root")
+c = root.attach(Player("c"))
 root.sys_update()
 c.x = 6
 c.y = 0
